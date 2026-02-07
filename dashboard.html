@@ -183,6 +183,12 @@
                 <div id="services-chart" class="bar-chart"></div>
             </div>
 
+            <!-- Treatment Intent Breakdown Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Treatment Intent Breakdown</div>
+                <div id="treatment-intent-chart" class="bar-chart"></div>
+            </div>
+
             <!-- Recent Records Table -->
             <div class="chart-container">
                 <div class="chart-title">Recent Records</div>
@@ -195,6 +201,9 @@
                             <th>Diagnosis</th>
                             <th>Services</th>
                             <th>First Visit</th>
+                            <th>RT Treatment Made</th>
+                            <th>RT Initiated</th>
+                            <th>Treatment Intent</th>
                             <th>Created</th>
                         </tr>
                     </thead>
@@ -247,6 +256,10 @@
             // Update services chart
             updateBarChart('services-chart', stats.services_breakdown, stats.total_records);
 
+            // Update treatment intent chart
+            const intentTotal = Object.values(stats.treatment_intent_breakdown || {}).reduce((a, b) => a + b, 0);
+            updateBarChart('treatment-intent-chart', stats.treatment_intent_breakdown || {}, intentTotal || stats.total_records);
+
             // Update records table
             updateRecordsTable(records);
         }
@@ -294,12 +307,30 @@
                 row.insertCell(3).textContent = formatLabel(record.data['primary-diagnosis']) || '-';
                 row.insertCell(4).textContent = formatLabel(record.data['services']) || '-';
                 row.insertCell(5).textContent = record.data['first-visit'] || '-';
-                row.insertCell(6).textContent = record.created_at || '-';
+                row.insertCell(6).textContent = record.data['rt-decision-date'] || '-';
+                row.insertCell(7).textContent = record.data['rt-start-date'] || '-';
+                row.insertCell(8).textContent = formatLabel(record.data['rt-intent']) || '-';
+                row.insertCell(9).textContent = record.created_at || '-';
             });
         }
 
         function formatLabel(label) {
             if (!label) return '';
+            // Handle special cases for better readability
+            const specialCases = {
+                'chemotherapy-radiotherapy': 'Chemotherapy and Radiotherapy',
+                'radiotherapy-alone': 'Radiotherapy Alone',
+                'chemotherapy-alone': 'Chemotherapy Alone',
+                'first-visit': 'First Visit',
+                'best-supportive-care': 'Best Supportive Care',
+                'curative': 'Curative',
+                'palliative': 'Palliative'
+            };
+            
+            if (specialCases[label]) {
+                return specialCases[label];
+            }
+            
             return label.split('-').map(word => 
                 word.charAt(0).toUpperCase() + word.slice(1)
             ).join(' ');

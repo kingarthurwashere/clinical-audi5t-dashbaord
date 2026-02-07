@@ -200,6 +200,7 @@ class XmlOdm {
             'diagnosis_breakdown' => [],
             'gender_breakdown' => ['male' => 0, 'female' => 0],
             'services_breakdown' => [],
+            'treatment_intent_breakdown' => [],
             'avg_waiting_time' => 0
         ];
         
@@ -232,6 +233,18 @@ class XmlOdm {
                 $stats['services_breakdown'][$service] = 0;
             }
             $stats['services_breakdown'][$service]++;
+        }
+        
+        // Count by treatment intent
+        $intentFields = $xpath->query("//field[@name='rt-intent']");
+        foreach ($intentFields as $field) {
+            $intent = $field->nodeValue;
+            if (!empty($intent)) {
+                if (!isset($stats['treatment_intent_breakdown'][$intent])) {
+                    $stats['treatment_intent_breakdown'][$intent] = 0;
+                }
+                $stats['treatment_intent_breakdown'][$intent]++;
+            }
         }
         
         // Calculate average waiting time
