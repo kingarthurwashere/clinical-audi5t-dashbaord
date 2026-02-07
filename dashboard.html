@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Audit Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            background-color: #2c5282;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .chart-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bar-label {
+            min-width: 150px;
+            font-size: 14px;
+        }
+        .bar-fill {
+            background-color: #4a90e2;
+            height: 25px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #3182ce;
+        }
+        .export-btn {
+            background-color: #48bb78;
+        }
+        .export-btn:hover {
+            background-color: #38a169;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Clinical Audit Dashboard</h1>
+            <p>Parirenyatwa RTC - 2024 Audit Analytics</p>
+        </div>
+
+        <div class="button-group">
+            <button onclick="loadDashboard()">Refresh Data</button>
+            <button class="export-btn" onclick="exportData('json')">Export JSON</button>
+            <button class="export-btn" onclick="exportData('csv')">Export CSV</button>
+            <button onclick="window.location.href='clinical-audit-form.html'">New Entry</button>
+        </div>
+
+        <div id="loading" class="loading">Loading dashboard data...</div>
+
+        <div id="dashboard" style="display: none;">
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <div class="value" id="total-patients">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Male Patients</h3>
+                    <div class="value" id="male-patients">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Female Patients</h3>
+                    <div class="value" id="female-patients">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Waiting Time (Days)</h3>
+                    <div class="value" id="avg-waiting">0</div>
+                </div>
+            </div>
+
+            <!-- Diagnosis Breakdown Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Diagnosis Breakdown</div>
+                <div id="diagnosis-chart" class="bar-chart"></div>
+            </div>
+
+            <!-- Services Breakdown Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Services Received</div>
+                <div id="services-chart" class="bar-chart"></div>
+            </div>
+
+            <!-- Recent Records Table -->
+            <div class="chart-container">
+                <div class="chart-title">Recent Records</div>
+                <table id="records-table">
+                    <thead>
+                        <tr>
+                            <th>RTC Number</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Diagnosis</th>
+                            <th>Services</th>
+                            <th>First Visit</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="records-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load dashboard on page load
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+
+        function loadDashboard() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+
+            fetch('statistics.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateDashboard(data);
+                    } else {
+                        alert('Error loading dashboard: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                });
+        }
+
+        function updateDashboard(data) {
+            const stats = data.statistics;
+            const records = data.records;
+
+            // Update stat cards
+            document.getElementById('total-patients').textContent = stats.total_records;
+            document.getElementById('male-patients').textContent = stats.gender_breakdown.male;
+            document.getElementById('female-patients').textContent = stats.gender_breakdown.female;
+            document.getElementById('avg-waiting').textContent = stats.avg_waiting_time;
+
+            // Update diagnosis chart
+            updateBarChart('diagnosis-chart', stats.diagnosis_breakdown, stats.total_records);
+
+            // Update services chart
+            updateBarChart('services-chart', stats.services_breakdown, stats.total_records);
+
+            // Update records table
+            updateRecordsTable(records);
+        }
+
+        function updateBarChart(elementId, data, total) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+
+            // Sort by count
+            const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+
+            sorted.forEach(([label, count]) => {
+                const percentage = total > 0 ? (count / total * 100) : 0;
+                
+                const barItem = document.createElement('div');
+                barItem.className = 'bar-item';
+
+                const barLabel = document.createElement('div');
+                barLabel.className = 'bar-label';
+                barLabel.textContent = formatLabel(label);
+
+                const barFill = document.createElement('div');
+                barFill.className = 'bar-fill';
+                barFill.style.width = percentage + '%';
+                barFill.textContent = count + ' (' + percentage.toFixed(1) + '%)';
+
+                barItem.appendChild(barLabel);
+                barItem.appendChild(barFill);
+                container.appendChild(barItem);
+            });
+        }
+
+        function updateRecordsTable(records) {
+            const tbody = document.getElementById('records-tbody');
+            tbody.innerHTML = '';
+
+            // Show last 20 records
+            const recentRecords = records.slice(-20).reverse();
+
+            recentRecords.forEach(record => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = record.data['patient-id'] || '-';
+                row.insertCell(1).textContent = record.data['age'] || '-';
+                row.insertCell(2).textContent = record.data['gender'] || '-';
+                row.insertCell(3).textContent = formatLabel(record.data['primary-diagnosis']) || '-';
+                row.insertCell(4).textContent = formatLabel(record.data['services']) || '-';
+                row.insertCell(5).textContent = record.data['first-visit'] || '-';
+                row.insertCell(6).textContent = record.created_at || '-';
+            });
+        }
+
+        function formatLabel(label) {
+            if (!label) return '';
+            return label.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function exportData(format) {
+            window.location.href = 'export.php?format=' + format;
+        }
+    </script>
+</body>
+</html>

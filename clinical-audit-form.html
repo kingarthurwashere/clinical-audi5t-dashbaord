@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parirenyatwa RTC Clinical Audit Data Collection Sheet 2024</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            background-color: #2c5282;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .section-title {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .section-content {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f7fafc;
+            font-weight: bold;
+        }
+        .field-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+        input, select, textarea {
+            padding: 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+        .radio-item input {
+            margin-right: 8px;
+            width: auto;
+        }
+        .instructions {
+            background-color: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .print-button, .save-button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .save-button {
+            background-color: #48bb78;
+        }
+        .save-button:hover {
+            background-color: #38a169;
+        }
+        .print-button:hover {
+            background-color: #3182ce;
+        }
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        .message.success {
+            background-color: #c6f6d5;
+            border: 1px solid #48bb78;
+            color: #22543d;
+        }
+        .message.error {
+            background-color: #fed7d7;
+            border: 1px solid #f56565;
+            color: #742a2a;
+        }
+        @media print {
+            .print-button, .save-button, .button-group { display: none; }
+            body { margin: 0; }
+            .container { box-shadow: none; }
+        }
+        @media (max-width: 768px) {
+            .field-group {
+                grid-template-columns: 1fr;
+            }
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>PARIRENYATWA GROUP OF HOSPITALS</h1>
+            <h2>RADIOTHERAPY CENTRE (RTC)</h2>
+            <h3>Clinical Audit Data Collection Sheet - 2024</h3>
+            <p><strong>Audit Focus:</strong> Patient Volume, Diagnosis Overview & Radiotherapy Treatment Waiting Times</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="button-group">
+            <button class="print-button" onclick="window.print()">Print This Form</button>
+            <button class="save-button" onclick="saveFormData()">Save to Database</button>
+        </div>
+
+        <div class="instructions">
+            <strong>Instructions:</strong> Complete one form per patient. For Section A, complete for ALL patients seen at RTC in 2024. For Sections B & C, complete only for patients who received radiotherapy treatment.
+        </div>
+
+        <form id="auditForm">
+            <!-- SECTION A: GENERAL PATIENT INFORMATION -->
+            <div class="section">
+                <div class="section-title">SECTION A: GENERAL PATIENT INFORMATION (All Patients)</div>
+                <div class="section-content">
+                    <div class="field-group">
+                        <div class="field">
+                            <label for="patient-id">RTC Number:</label>
+                            <input type="text" id="patient-id" name="patient-id" required>
+                        </div>
+                        <div class="field">
+                            <label for="data-collector">Data Collector Initials:</label>
+                            <input type="text" id="data-collector" name="data-collector" required>
+                        </div>
+                        <div class="field">
+                            <label for="collection-date">Date of Data Collection:</label>
+                            <input type="date" id="collection-date" name="collection-date" required>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field">
+                            <label for="age">Age at First Visit:</label>
+                            <input type="number" id="age" name="age" min="0" max="120" required>
+                        </div>
+                        <div class="field">
+                            <label for="gender">Gender:</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="first-visit">Date of First Visit to RTC 2024:</label>
+                            <input type="date" id="first-visit" name="first-visit" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="primary-diagnosis">Primary Diagnosis:</label>
+                        <select id="primary-diagnosis" name="primary-diagnosis" required>
+                            <option value="">Select Primary Diagnosis...</option>
+                            <option value="breast-cancer">Breast Cancer</option>
+                            <option value="cervical-cancer">Cervical Cancer</option>
+                            <option value="prostate-cancer">Prostate Cancer</option>
+                            <option value="lung-cancer">Lung Cancer</option>
+                            <option value="colorectal-cancer">Colorectal Cancer</option>
+                            <option value="head-neck-cancer">Head & Neck Cancer</option>
+                            <option value="brain-tumor">Brain Tumor</option>
+                            <option value="lymphoma">Lymphoma</option>
+                            <option value="sarcoma">Sarcoma</option>
+                            <option value="skin-cancer">Skin Cancer</option>
+                            <option value="other">Other (specify below)</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="diagnosis-other">If Other, specify:</label>
+                        <input type="text" id="diagnosis-other" name="diagnosis-other">
+                    </div>
+
+                    <div class="field">
+                        <label for="cancer-stage">Cancer Stage (if applicable):</label>
+                        <select id="cancer-stage" name="cancer-stage">
+                            <option value="">Select Stage...</option>
+                            <option value="stage-1">Stage I</option>
+                            <option value="stage-2">Stage II</option>
+                            <option value="stage-3">Stage III</option>
+                            <option value="stage-4">Stage IV</option>
+                            <option value="unknown">Unknown/Not Documented</option>
+                            <option value="na">Not Applicable</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Services Received at RTC (Select one):</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="consultation-only" name="services" value="consultation-only">
+                                <label for="consultation-only">1. Consultation only</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="chemotherapy-only" name="services" value="chemotherapy-only">
+                                <label for="chemotherapy-only">2. Chemotherapy only</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="radiotherapy-only" name="services" value="radiotherapy-only">
+                                <label for="radiotherapy-only">3. Radiotherapy only</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="radiotherapy-chemotherapy" name="services" value="radiotherapy-chemotherapy">
+                                <label for="radiotherapy-chemotherapy">4. Radiotherapy and chemotherapy</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="best-supportive-care" name="services" value="best-supportive-care">
+                                <label for="best-supportive-care">5. Best supportive care</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION B: RADIOTHERAPY SPECIFIC INFORMATION -->
+            <div class="section">
+                <div class="section-title">SECTION B: RADIOTHERAPY SPECIFIC INFORMATION (Complete ONLY if patient received radiotherapy)</div>
+                <div class="section-content">
+                    <div class="instructions">
+                        <strong>Note:</strong> Complete this section only for patients who actually received radiotherapy treatment in 2024.
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field">
+                            <label for="rt-decision-date">Date Decision Made to Treat with Radiotherapy:</label>
+                            <input type="date" id="rt-decision-date" name="rt-decision-date">
+                        </div>
+                        <div class="field">
+                            <label for="rt-start-date">Date Radiotherapy Treatment Started:</label>
+                            <input type="date" id="rt-start-date" name="rt-start-date">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="rt-intent">Treatment Intent:</label>
+                        <select id="rt-intent" name="rt-intent">
+                            <option value="">Select Intent...</option>
+                            <option value="curative">Curative</option>
+                            <option value="palliative">Palliative</option>
+                            <option value="adjuvant">Adjuvant</option>
+                            <option value="neoadjuvant">Neoadjuvant</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="rt-technique">Radiotherapy Technique:</label>
+                        <select id="rt-technique" name="rt-technique">
+                            <option value="">Select Technique...</option>
+                            <option value="3dcrt">3D Conformal RT</option>
+                            <option value="imrt">IMRT</option>
+                            <option value="conventional">Conventional RT</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="treatment-site">Primary Treatment Site:</label>
+                        <select id="treatment-site" name="treatment-site">
+                            <option value="">Select Site...</option>
+                            <option value="breast">Breast</option>
+                            <option value="chest-wall">Chest Wall</option>
+                            <option value="pelvis">Pelvis</option>
+                            <option value="prostate">Prostate</option>
+                            <option value="cervix">Cervix</option>
+                            <option value="head-neck">Head & Neck</option>
+                            <option value="brain">Brain</option>
+                            <option value="lung">Lung</option>
+                            <option value="spine">Spine</option>
+                            <option value="bone">Bone (other)</option>
+                            <option value="abdomen">Abdomen</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field">
+                            <label for="prescribed-dose">Prescribed Dose (Gy):</label>
+                            <input type="number" id="prescribed-dose" name="prescribed-dose" step="0.1">
+                        </div>
+                        <div class="field">
+                            <label for="fractions">Number of Fractions:</label>
+                            <input type="number" id="fractions" name="fractions">
+                        </div>
+                        <div class="field">
+                            <label for="rt-completion">Treatment Completion Status:</label>
+                            <select id="rt-completion" name="rt-completion">
+                                <option value="">Select Status...</option>
+                                <option value="completed">Completed as Planned</option>
+                                <option value="ongoing">Ongoing</option>
+                                <option value="incomplete">Incomplete</option>
+                                <option value="discontinued">Discontinued</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION C: WAITING TIME CALCULATION -->
+            <div class="section">
+                <div class="section-title">SECTION C: WAITING TIME ANALYSIS (Auto-calculated based on dates above)</div>
+                <div class="section-content">
+                    <table>
+                        <tr>
+                            <th>Waiting Time Metric</th>
+                            <th>Value</th>
+                            <th>Target Standard</th>
+                            <th>Meets Standard?</th>
+                        </tr>
+                        <tr>
+                            <td>Days from Decision to RT Start</td>
+                            <td><input type="number" id="waiting-days" name="waiting-days" readonly style="background-color: #f7fafc;"></td>
+                            <td>≤28 days (4 weeks)</td>
+                            <td><select id="meets-4wk" name="meets-4wk">
+                                <option value="">Select...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td>Weeks from Decision to RT Start</td>
+                            <td><input type="number" id="waiting-weeks" name="waiting-weeks" readonly style="background-color: #f7fafc;" step="0.1"></td>
+                            <td>≤6 weeks</td>
+                            <td><select id="meets-6wk" name="meets-6wk">
+                                <option value="">Select...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td>Within 8 weeks?</td>
+                            <td>-</td>
+                            <td>≤8 weeks</td>
+                            <td><select id="meets-8wk" name="meets-8wk">
+                                <option value="">Select...</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select></td>
+                        </tr>
+                    </table>
+
+                    <div class="field">
+                        <label for="delay-reason">If treatment delayed >4 weeks, reason for delay:</label>
+                        <textarea id="delay-reason" name="delay-reason" rows="3" placeholder="e.g., Patient factors, Equipment issues, Scheduling conflicts, Medical reasons, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION D: NOTES -->
+            <div class="section">
+                <div class="section-title">SECTION D: ADDITIONAL NOTES</div>
+                <div class="section-content">
+                    <div class="field">
+                        <label for="additional-notes">Additional Comments/Notes:</label>
+                        <textarea id="additional-notes" name="additional-notes" rows="4" placeholder="Any additional relevant information about the patient's care or delays..."></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="data-source">Primary Data Source:</label>
+                        <select id="data-source" name="data-source">
+                            <option value="">Select Source...</option>
+                            <option value="patient-notes">Patient Medical Notes</option>
+                            <option value="electronic-records">Electronic Health Records</option>
+                            <option value="rt-planning-system">RT Planning System</option>
+                            <option value="appointment-system">Appointment System</option>
+                            <option value="multiple">Multiple Sources</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f7fafc; border-radius: 8px;">
+                <p><strong>Data Collection Completed By:</strong> _________________ <strong>Date:</strong> _________________</p>
+                <p><strong>Data Verified By:</strong> _________________ <strong>Date:</strong> _________________</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Auto-calculate waiting times when dates are entered
+        document.getElementById('rt-decision-date').addEventListener('change', calculateWaitingTime);
+        document.getElementById('rt-start-date').addEventListener('change', calculateWaitingTime);
+
+        function calculateWaitingTime() {
+            const decisionDate = document.getElementById('rt-decision-date').value;
+            const startDate = document.getElementById('rt-start-date').value;
+
+            if (decisionDate && startDate) {
+                const decision = new Date(decisionDate);
+                const start = new Date(startDate);
+                const diffTime = Math.abs(start - decision);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const diffWeeks = (diffDays / 7).toFixed(1);
+
+                document.getElementById('waiting-days').value = diffDays;
+                document.getElementById('waiting-weeks').value = diffWeeks;
+
+                // Auto-populate standard compliance
+                document.getElementById('meets-4wk').value = diffDays <= 28 ? 'yes' : 'no';
+                document.getElementById('meets-6wk').value = diffDays <= 42 ? 'yes' : 'no';
+                document.getElementById('meets-8wk').value = diffDays <= 56 ? 'yes' : 'no';
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function saveFormData() {
+            const form = document.getElementById('auditForm');
+            const formData = new FormData(form);
+            
+            // Convert FormData to JSON
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Send data to server
+            fetch('save-audit.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showMessage('Data saved successfully! Record ID: ' + result.id, 'success');
+                    // Optionally reset form
+                    // form.reset();
+                } else {
+                    showMessage('Error saving data: ' + result.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('Error: ' + error.message, 'error');
+            });
+        }
+    </script>
+</body>
+</html>
