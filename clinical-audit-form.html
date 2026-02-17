@@ -256,24 +256,24 @@
                         <label>Services Received at RTC (Select one):</label>
                         <div class="radio-group">
                             <div class="radio-item">
-                                <input type="radio" id="consultation-only" name="services" value="consultation-only">
-                                <label for="consultation-only">1. Consultation only</label>
+                                <input type="radio" id="radiotherapy-alone" name="services" value="radiotherapy-alone">
+                                <label for="radiotherapy-alone">Radiotherapy alone</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" id="chemotherapy-only" name="services" value="chemotherapy-only">
-                                <label for="chemotherapy-only">2. Chemotherapy only</label>
+                                <input type="radio" id="chemotherapy-alone" name="services" value="chemotherapy-alone">
+                                <label for="chemotherapy-alone">Chemotherapy alone</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" id="radiotherapy-only" name="services" value="radiotherapy-only">
-                                <label for="radiotherapy-only">3. Radiotherapy only</label>
+                                <input type="radio" id="chemotherapy-radiotherapy" name="services" value="chemotherapy-radiotherapy">
+                                <label for="chemotherapy-radiotherapy">Chemotherapy and radiotherapy</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" id="radiotherapy-chemotherapy" name="services" value="radiotherapy-chemotherapy">
-                                <label for="radiotherapy-chemotherapy">4. Radiotherapy and chemotherapy</label>
+                                <input type="radio" id="first-visit" name="services" value="first-visit">
+                                <label for="first-visit">First visit</label>
                             </div>
                             <div class="radio-item">
                                 <input type="radio" id="best-supportive-care" name="services" value="best-supportive-care">
-                                <label for="best-supportive-care">5. Best supportive care</label>
+                                <label for="best-supportive-care">Best supportive care</label>
                             </div>
                         </div>
                     </div>
@@ -290,11 +290,11 @@
 
                     <div class="field-group">
                         <div class="field">
-                            <label for="rt-decision-date">Date Decision Made to Treat with Radiotherapy:</label>
+                            <label for="rt-decision-date">Date Radiotherapy Treatment Was Made:</label>
                             <input type="date" id="rt-decision-date" name="rt-decision-date">
                         </div>
                         <div class="field">
-                            <label for="rt-start-date">Date Radiotherapy Treatment Started:</label>
+                            <label for="rt-start-date">Date Radiotherapy Initiated:</label>
                             <input type="date" id="rt-start-date" name="rt-start-date">
                         </div>
                     </div>
@@ -305,8 +305,6 @@
                             <option value="">Select Intent...</option>
                             <option value="curative">Curative</option>
                             <option value="palliative">Palliative</option>
-                            <option value="adjuvant">Adjuvant</option>
-                            <option value="neoadjuvant">Neoadjuvant</option>
                         </select>
                     </div>
 
