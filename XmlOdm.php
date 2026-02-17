@@ -4,6 +4,8 @@
  * Provides CRUD operations for XML-based database storage
  */
 
+require_once 'AuditRecord.php';
+
 class XmlOdm {
     private $xmlFile;
     private $dom;

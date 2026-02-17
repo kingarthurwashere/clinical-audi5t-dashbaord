@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clinical_audit_database version="1.0" created="2026-02-17 11:52:13">
+  <records>
+    <record id="AUD20260217_699456be8b74e" created_at="2026-02-17 11:53:34" updated_at="2026-02-17 11:53:34">
+      <field name="patient-id">237812</field>
+      <field name="data-collector">2455564</field>
+      <field name="collection-date">2026-02-17</field>
+      <field name="age">24</field>
+      <field name="gender">male</field>
+      <field name="first-visit">2026-02-19</field>
+      <field name="primary-diagnosis">breast-cancer</field>
+      <field name="diagnosis-other"></field>
+      <field name="cancer-stage">stage-1</field>
+      <field name="services">consultation-only</field>
+      <field name="rt-decision-date">2026-02-05</field>
+      <field name="rt-start-date">2026-02-17</field>
+      <field name="rt-intent">curative</field>
+      <field name="rt-technique">3dcrt</field>
+      <field name="treatment-site">breast</field>
+      <field name="prescribed-dose">2</field>
+      <field name="fractions">24</field>
+      <field name="rt-completion">completed</field>
+      <field name="waiting-days">12</field>
+      <field name="meets-4wk">yes</field>
+      <field name="waiting-weeks">1.7</field>
+      <field name="meets-6wk">no</field>
+      <field name="meets-8wk">no</field>
+      <field name="delay-reason">dfergerregrth</field>
+      <field name="additional-notes">feftgerger</field>
+      <field name="data-source">patient-notes</field>
+    </record>
+  </records>
+</clinical_audit_database>
